@@ -7,7 +7,7 @@ tags: []
 
 
 ##### Introduction
-##### Chapter 3
+#### Chapter 3
 CUDA is a platform for running GPU code. So one big perk of CUDA is to use syntax similar to that used for CPU programming to write GPU code. In order to do that, CUDA C introduced some key words in addition to the standard C. 
 
 Some of the keywords are used to distinguish code that runs on **device** and **host**. (host is the CPU, device is the GPU). I like to think of the host (CPU) as the manager/orchestrater, and it "tells" the device (GPU) what to do.
@@ -31,8 +31,9 @@ Some of the keywords are used to distinguish code that runs on **device** and **
 	- [`cudaGetDeviceCount`]()
 	- [`cudaDeviceProp`](): a struct containing device info
 	- [`cudaChooseDevice()`]()
-	- 
-##### Chapter 4
+
+
+#### Chapter 4
 Parallel programming in CUDA
 - Lets go back to the kernel launch call: `kernel<<<m, n>>>(arg1, arg2...)`
 	- Here, `m` means the number of parallel blocks in which we would like the device to execute the kernel.
@@ -51,7 +52,27 @@ Parallel programming in CUDA
 	Turns out CUDA sometimes use a ***linear offset*** to access memory in pointers. This give us a unique index into ptr that range from 0 to `m*n -1 `
 - For a function that runs on the device (not the kernel), we can use:
 	- `__device__` signature to indicate the code will run on GPU. These function can only be run on functions defined with `__device__` or `__global__`. 
+
+#### Chapter 5
+- When launching a CUDA kernel, we do:
+	```
+	kernel<<<Blocks, Threads>>>(args)
+	```
+	- The second argument means **the number of threads / Block**
+	- To index a thread, we have `threadIdx.x` and `threadIdx.y`.
+- Recall: Limit on number of blocks in a single launch: 65,535
+	- Limit on **Number of threads/block**: `maxThreadsPerBlock` (from the device properties structure, usually 512 threads/block)
+- To index a thread, we use **the standard way to convert 2D index to 1D index**
+		$$tid = threadIdx.x + blockIdx.x \times blockDim.x$$
+		![[Pasted image 20240712161901.png]]
+	- `blockDim`: a constant for all blocks, stores the number of streads along each block dimension.It is a **3D** variable
+- When using both Blocks and Threads, sometimes we want N total threads across K threads, which is N/K Threads per Block. To make it a integer division, we can use the following trick: 
+		$$ (N + K - 1) / K$$
+	- This result will be the smallest integer that is **larger than or equal** to N/K
+	
 	- 
+
+---
 
 
 ##### Some useful links:
