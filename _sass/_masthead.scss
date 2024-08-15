@@ -37,6 +37,9 @@
 }
 
 .masthead__menu {
+  display: flex;
+  justify-content: space-between;
+
 
   ul {
     margin: 0;
@@ -55,4 +58,12 @@
     padding-right: 3em;
     font-weight: 700;
   }
+}
+
+.masthead__menu-clock {
+  display: block;
+  list-style-type: none;
+  white-space: nowrap;
+  padding-left: 1em;
+  float: right;
 }
