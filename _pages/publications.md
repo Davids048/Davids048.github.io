@@ -17,9 +17,9 @@ author_profile: false
 
 📄 In Defense of Structural Sparse Adapters for Concurrent LLM Serving \
 **Junda Su**, Zirui Liu, Zeju Qiu, Weiyang Liu, Zhaozhuo Xu. \
-*In submission to EMNLP’2024. Accepted in ES-FOMO at ICML’24*  \
+*Accepted in EMNLP’2024 Findings. Accepted in ES-FOMO (workshop) at ICML’24*  \
 [paper](https://openreview.net/forum?id=XmkNjekAOm&noteId=XmkNjekAOm) [poster](https://docs.google.com/presentation/d/1lCfdgmzniGZnQUqzfxjlnWs5GLfbjAf0x6J-sbWrs-I/edit)
 
 📄 Hierarchical Deep Learning for Autonomous Multilabel Arrhythmia Detection and Classiﬁcation on Real-world Wearable ECG Data \
 Guangyao Zheng, Sunghan Lee, Jeonghwan Koh, Khushbu Pahwa, Haoran Li, Zicheng Xu, Haiming Sun, **Junda Su**, Sung Pil Cho, Sung Il Im, In cheol Jeong, Vladimir Braverman \
-*In submission to Digital Health*
+*Accepted in Digital Health*
