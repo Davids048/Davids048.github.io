@@ -6,8 +6,10 @@ redirect_from:
   - /about/
   - /about.html
 ---
-I am an undergradute student at Rice University studying computer science. I’m applying for Master Programs and Ph.D. programs in the Fall 2024 cycle. 
+I am an undergradute student at Rice University studying computer science. I’m applying for Ph.D. programs in the Fall 2024 cycle. 
 
-My research interests lie at the intersection of efficient ML and systems. I am interested in developing efficient LLM algorithms, as well as hardware-aware systems that speed up these architectures. 
+My research interests lie at the intersection of efficient ML and hardware-aware systems. I am interested in developing efficient LLM algorithms, as well as hardware-aware systems that accelerate these emerging architectures. 
 
-My last project focused on developing a concurrent LLM adapter serving system tailored for structural sparse BOFT adapters, achieving a 2.12x speedup over S-LoRA when serving 96 adapters using a single NVIDIA A100 GPU. We developed a unified matrix multiplication operation that enabled efficient adapter batching using Triton kernels. Our paper is accepted in ES-FOMO at ICML'24 and in submission to EMNLP'2024. Currently, I'm working on integrating a newly developed 2-bit quantization scheme (KIVI) into TensorRT-LLM.
+My most recent project proposed a new fine-tuning paradigm on compressed LLM models using parameter-sharing, demonstrating better accuracy and up to 3x inference efficiency compared to SOTA adapter-based compressive fine-tuning techniques. Our paper is in submission to ICLR'2025. 
+
+Previously, I developed a concurrent LLM adapter serving system tailored for structural sparse BOFT adapters, achieving a 2.12x speedup compared to SOTA LoRA adapter serving systems on restricted GPU resource. Our paper is accepted in EMNLP'2024 findings and was presented in ES-FOMO (workshop) at ICML'24. 

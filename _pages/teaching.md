@@ -12,7 +12,7 @@ author_profile: true
 {% endfor %} -->
 
 **COMP 318 - Concurrent Program Design - Fall 2024** \
-Teaching Assistant \
+Teaching Assistant
 
 **COMP 321 - Introduction to Computer Systems - Spring 2024** \
 Teaching Assistant \
