@@ -15,6 +15,11 @@ author_profile: false
   {% include archive-single.html %}
 {% endfor %}
 
+📄 SpaLLM: Unified Compressive Adaptation of Large Language Models with Sketching \
+Tianyi Zhang, **Junda Su**, Oscar Wu, Zhaozhuo Xu, Anshumali Shrivastava \
+*In submission to ICLR'2025* \
+[paper](https://arxiv.org/abs/2410.06364)
+
 📄 In Defense of Structural Sparse Adapters for Concurrent LLM Serving \
 **Junda Su**, Zirui Liu, Zeju Qiu, Weiyang Liu, Zhaozhuo Xu. \
 *Accepted in EMNLP’2024 Findings. Accepted in ES-FOMO (workshop) at ICML’24*  \
