@@ -15,16 +15,17 @@ author_profile: false
   {% include archive-single.html %}
 {% endfor %}
 
-📄 SpaLLM: Unified Compressive Adaptation of Large Language Models with Sketching \
+**SpaLLM: Unified Compressive Adaptation of Large Language Models with Sketching** \
 Tianyi Zhang, **Junda Su**, Oscar Wu, Zhaozhuo Xu, Anshumali Shrivastava \
 *In submission to ICLR'2025* \
 [paper](https://arxiv.org/abs/2410.06364)
 
-📄 In Defense of Structural Sparse Adapters for Concurrent LLM Serving \
+**In Defense of Structural Sparse Adapters for Concurrent LLM Serving** \
 **Junda Su**, Zirui Liu, Zeju Qiu, Weiyang Liu, Zhaozhuo Xu. \
-*Accepted in EMNLP’2024 Findings. Accepted in ES-FOMO (workshop) at ICML’24*  \
-[paper](https://openreview.net/forum?id=XmkNjekAOm&noteId=XmkNjekAOm) [poster](https://docs.google.com/presentation/d/1lCfdgmzniGZnQUqzfxjlnWs5GLfbjAf0x6J-sbWrs-I/edit)
+*Published in Findings of EMNLP’2024. Accepted in ES-FOMO (workshop) at ICML’24*  \
+[paper](https://aclanthology.org/2024.findings-emnlp.284/) [poster](https://drive.google.com/drive/u/1/folders/1kZA0EYDe90BbBGEVNGuoWS-_ASEzWdhH)
 
-📄 Hierarchical Deep Learning for Autonomous Multilabel Arrhythmia Detection and Classiﬁcation on Real-world Wearable ECG Data \
+**Hierarchical Deep Learning for Autonomous Multilabel Arrhythmia Detection and Classiﬁcation on Real-world Wearable ECG Data** \
 Guangyao Zheng, Sunghan Lee, Jeonghwan Koh, Khushbu Pahwa, Haoran Li, Zicheng Xu, Haiming Sun, **Junda Su**, Sung Pil Cho, Sung Il Im, In cheol Jeong, Vladimir Braverman \
-*Accepted in Digital Health*
+*Published in Digital Health*
+[paper](https://pubmed.ncbi.nlm.nih.gov/39416857/)
