@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Junda Su</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body style="font-family: Helvetica">
+    <nav>
+        <a href="../">Home</a>
+        |
+        <a href="../projects/">Projects</a>
+        |
+        <a href="../contact/">Contact</a>
+        |
+        <a href="./">CV</a>
+        |
+        <a href="https://github.com/Davids048" target="_blank">GitHub</a>
+    </nav>
+    <header>
+        <h1>Junda (David) Su</h1>
+        <p>
+            PhD student in Data Science at UC San Diego.
+            <a href="../data/cv.pdf">PDF version</a>
+        </p>
+    </header>
+
+    <section id="education">
+        <h2>Education</h2>
+        <article>
+            <header>
+                <h3>University of California San Diego</h3>
+                <p>PhD in Data Science, La Jolla, CA</p>
+            </header>
+            <p><time datetime="2025-09">Sep 2025</time> - Present</p>
+        </article>
+        <article>
+            <header>
+                <h3>Rice University</h3>
+                <p>Bachelor of Science in Computer Science, Houston, TX</p>
+            </header>
+            <p><time datetime="2021-08">Aug 2021</time> - <time datetime="2025-05">May 2025</time></p>
+            <ul>
+                <li>GPA: 3.94/4.00</li>
+                <li>Honors: President's Honor Roll (2022, 2023, 2024)</li>
+            </ul>
+        </article>
+    </section>
+
+    <section id="research">
+        <h2>Research Experience</h2>
+        <article>
+            <header>
+                <h3>Rice University - Research Assistant</h3>
+                <p>Mentor: Prof. Anshumali Shrivastava</p>
+            </header>
+            <p><time datetime="2024-08">Aug 2024</time> - <time datetime="2024-10">Oct 2024</time></p>
+            <ul>
+                <li>Proposed SpaLLM, a fine-tuning paradigm on compressed LLMs using parameter-sharing algorithms.</li>
+                <li>Benchmarked across LLaMA-2-7B/13B, LLaMA-3-8B and 70B, achieving up to 3x inference speedup over adapter-based compressive fine-tuning.</li>
+            </ul>
+        </article>
+        <article>
+            <header>
+                <h3>Rice University - Research Assistant</h3>
+                <p>Mentor: Prof. Zhaozhuo Xu</p>
+            </header>
+            <p><time datetime="2023-12">Dec 2023</time> - <time datetime="2024-06">Jun 2024</time></p>
+            <ul>
+                <li>Proposed SpartanServe, a system for fast concurrent LLM adapter serving with structurally sparse adapters.</li>
+                <li>Used Triton kernels and CUDA graphs to accelerate batched matrix multiplication.</li>
+                <li>Achieved 2.12x speedup over S-LoRA when serving 96 adapters on a single A100 (40GB).</li>
+            </ul>
+        </article>
+        <article>
+            <header>
+                <h3>Rice University - Research Assistant</h3>
+                <p>Mentor: Prof. Vladimir Braverman</p>
+            </header>
+            <p><time datetime="2023-08">Aug 2023</time> - <time datetime="2023-10">Oct 2023</time></p>
+            <ul>
+                <li>Developed a CNN + BiLSTM model for arrhythmia classification on real-world wearable ECG data.</li>
+                <li>Achieved 95% average accuracy on binary and 88% on multi-label classification.</li>
+            </ul>
+        </article>
+        <article>
+            <header>
+                <h3>Baylor College of Medicine - Research Assistant</h3>
+                <p>Mentor: Prof. Robert Waterland</p>
+            </header>
+            <p><time datetime="2022-08">Aug 2022</time> - <time datetime="2022-12">Dec 2022</time></p>
+            <ul>
+                <li>Built a sequence-sampling API for whole-genome DNA methylation analysis software.</li>
+                <li>Parallelized the pipeline on a Linux cluster for a 20x data processing speedup.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section id="publications">
+        <h2>Publications</h2>
+        <ul>
+            <li>
+                Tianyi Zhang*, <b>Junda Su*</b>, Aditya Desai, Oscar Wu, Zhaozhuo Xu, Anshumali Shrivastava.
+                <a href="https://arxiv.org/abs/2410.06364">Sketch to Adapt: Fine-Tunable Sketches for Efficient LLM Adaptation</a>.
+                ICML <time datetime="2025">2025</time>.
+            </li>
+            <li>
+                <b>Junda Su</b>, Zirui Liu, Zeju Qiu, Weiyang Liu, Zhaozhuo Xu.
+                <a href="https://aclanthology.org/2024.findings-emnlp.284/">In Defense of Structural Sparse Adapters for Concurrent LLM Serving</a>.
+                Findings of EMNLP <time datetime="2024">2024</time>.
+            </li>
+            <li>
+                Guangyao Zheng, Sunghan Lee, Jeonghwan Koh, Khushbu Pahwa, Haoran Li, Zicheng Xu, Haiming Sun, <b>Junda Su</b>,
+                Sung Pil Cho, Sung Il Im, In cheol Jeong, Vladimir Braverman.
+                <a href="https://pubmed.ncbi.nlm.nih.gov/39416857/">Hierarchical Deep Learning for Autonomous Multilabel Arrhythmia Detection and Classification on Real-world Wearable ECG Data</a>.
+                Digital Health <time datetime="2024">2024</time>.
+            </li>
+        </ul>
+        <p>* indicates equal contribution</p>
+    </section>
+
+    <section id="work">
+        <h2>Professional Experience</h2>
+        <article>
+            <header>
+                <h3>Tokio Marine HCC</h3>
+                <p>Technology Advancement Program Intern, Houston, TX</p>
+            </header>
+            <p><time datetime="2023-05">May 2023</time> - <time datetime="2023-08">Aug 2023</time></p>
+            <ul>
+                <li>Designed quote submission and retrieval REST APIs for an insurance website.</li>
+                <li>Used AWS API Gateway, MongoDB, and PostgreSQL for traffic scaling and data management.</li>
+                <li>Led daily standups and biweekly sprint planning.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section id="teaching">
+        <h2>Teaching Experience</h2>
+        <p>Teaching Assistant, Rice University</p>
+        <ul>
+            <li>COMP 318: Concurrent Program Design, <time datetime="2024-08">Fall 2024</time></li>
+            <li>COMP 321: Introduction to Computer Systems, <time datetime="2024-01">Spring 2024</time></li>
+            <li>COMP 382: Reasoning about Algorithms, <time datetime="2023-08">Fall 2023</time></li>
+            <li>COMP 182: Algorithmic Thinking, <time datetime="2023-01">Spring 2023</time></li>
+        </ul>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li><b>Languages:</b> Python, C, C++, Java, CUDA, JavaScript, Golang, C#</li>
+            <li><b>Tools:</b> PyTorch, NumPy, Triton, Hugging Face, Git, Linux</li>
+            <li><b>Frameworks:</b> .NET, React, HTML, CSS, GraphQL, MongoDB, AWS, SQL</li>
+        </ul>
+    </section>
+</body>
+</html>
