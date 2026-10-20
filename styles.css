@@ -1,9 +1,13 @@
 /* Site-wide design tokens. The accent color is reused by nav hover states and
-   form controls, so it lives on :root where every element can inherit it. */
+   form controls, so it lives on :root where every element can inherit it.
+   color-scheme lets the browser follow the OS light or dark setting; global.js
+   overrides it when the visitor picks a color scheme. The border color is
+   semi-transparent so it stays subtle on both light and dark backgrounds. */
 :root {
     --color-accent: oklch(65% 50% 0);
-    --color-border: oklch(80% 3% 200);
+    --color-border: oklch(50% 10% 200 / 40%);
     accent-color: var(--color-accent);
+    color-scheme: light dark;
 }
 
 /* Keep body text at a readable line length and center it in the viewport. */
@@ -57,17 +61,30 @@ nav {
         &:hover {
             border-bottom: 0.4em solid var(--color-accent);
             padding-bottom: 0.1em;
-            background-color: oklch(from var(--color-accent) 95% 5% h);
+            /* Mixing with the canvas system color keeps the hover background
+               faint in both light and dark mode. */
+            background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
         }
     }
 }
 
-/* Contact form: two-column grid with label text on the left and the control
-   on the right. Each label is a subgrid so its children align to the form grid. */
-input, textarea, button {
+/* Color scheme switcher created by global.js, pinned to the top right corner of the
+   page outside the normal document flow. */
+.color-scheme {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 80%;
+}
+
+/* Form controls, including the color scheme select, use the page font instead
+   of the browser's default control font. */
+input, textarea, button, select {
     font: inherit;
 }
 
+/* Contact form: two-column grid with label text on the left and the control
+   on the right. Each label is a subgrid so its children align to the form grid. */
 form {
     display: grid;
     grid-template-columns: auto 1fr;
