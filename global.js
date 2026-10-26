@@ -17,12 +17,12 @@ let pages = [
 ];
 
 // A local server (for example, VS Code Live Server opened on this folder) serves
-// this site from the server root. GitHub Pages serves it from the DSC209R/lab4/
-// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab4/.
+// this site from the server root. GitHub Pages serves it from the DSC209R/lab5/
+// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab5/.
 const BASE_PATH =
     location.hostname === 'localhost' || location.hostname === '127.0.0.1'
         ? '/'
-        : '/DSC209R/lab4/';
+        : '/DSC209R/lab5/';
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
@@ -100,6 +100,8 @@ export async function fetchJSON(url) {
 // container held before. headingLevel is the tag for each project title. A
 // relative image path in the project data is a path from the site root, so the
 // same lib/projects.json file works on the home page and on the projects page.
+// The description and the year share one <div> because each article fills
+// exactly three rows (title, image, text) of the .projects grid.
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
     containerElement.innerHTML = '';
 
@@ -110,7 +112,10 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
         article.innerHTML = `
             <${headingLevel}>${project.title}</${headingLevel}>
             <img src="${image}" alt="${project.title}">
-            <p>${project.description}</p>
+            <div>
+                <p>${project.description}</p>
+                <p class="project-year">${project.year}</p>
+            </div>
         `;
         containerElement.appendChild(article);
     }

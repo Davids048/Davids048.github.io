@@ -122,7 +122,95 @@ form {
             aspect-ratio: 16 / 10;
             object-fit: contain;
         }
+
+        /* Oldstyle numerals make the year blend with the surrounding text. */
+        .project-year {
+            margin: 0;
+            font-family: Baskerville, serif;
+            font-variant-numeric: oldstyle-nums;
+            color: gray;
+        }
     }
+}
+
+/* Projects page: the pie chart and its legend sit side by side, and the legend
+   takes all of the width that the pie chart leaves. On a narrow screen the
+   legend wraps below the pie chart. */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2em;
+
+    .legend {
+        flex: 1;
+    }
+}
+
+/* Pie chart of projects per year drawn by projects.js. */
+#projects-pie-plot {
+    max-width: 20em;
+    margin-block: 2em;
+    overflow: visible;
+
+    path {
+        transition: 300ms;
+        cursor: pointer;
+    }
+
+    /* :has(path:hover) fades the other wedges only while a wedge is hovered,
+       so hovering the empty corners of the SVG fades nothing. */
+    &:has(path:hover) {
+        path:not(:hover) {
+            opacity: 0.5;
+        }
+    }
+}
+
+/* Legend of the pie chart: as many 9em-wide columns as fit. The gap inside each
+   item is smaller than the gap between items, so a swatch groups with its label. */
+.legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+    gap: 1em;
+    margin: 0;
+    padding: 1em;
+    border: 1px solid var(--color-border);
+    list-style: none;
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+    }
+
+    .swatch {
+        display: inline-block;
+        width: 1em;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background-color: var(--color);
+    }
+}
+
+/* The selected wedge and its legend item. !important is required to override
+   the --color value that projects.js sets in each legend item's style attribute.
+   Magenta differs from every Tableau 10 wedge color. */
+.selected {
+    --color: oklch(55% 60% 330) !important;
+
+    &:is(path) {
+        fill: var(--color);
+    }
+}
+
+/* Project search field, as wide as the project grid. */
+.searchBar {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-block-end: 1em;
+    padding: 0.5em;
 }
 
 /* GitHub profile stats on the home page: four equal columns, with every term (dt)
