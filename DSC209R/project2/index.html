@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project 2 Report</title>
+    <style>
+      :root {
+        --color-neutral-95: hsl(220 10% 95%);
+        --color-neutral-90: hsl(220 10% 90%);
+        --color-neutral-80: hsl(220 10% 80%);
+        --color-neutral-70: hsl(220 10% 70%);
+        --color-neutral-60: hsl(220 10% 60%);
+        --color-neutral-50: hsl(220 10% 50%);
+        --color-neutral-40: hsl(220 10% 40%);
+        --color-neutral-30: hsl(220 10% 30%);
+        --color-neutral-20: hsl(220 10% 20%);
+        --color-neutral-10: hsl(220 10% 10%);
+      }
+
+      html {
+        font: 100%/1.5 system-ui;
+        counter-reset: figure;
+        background: var(--color-neutral-95);
+        max-width: min(75vw, 80em);
+        margin: 0 auto;
+      }
+
+      /* Headings */
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+
+      h1,
+      h2 {
+        border-bottom: 1px solid var(--color-neutral-80);
+        padding-bottom: 0.2em;
+      }
+
+      h1 {
+        margin-block: 1em 0.5rem;
+        /* The 4.5em cap keeps the title on at most two lines in large windows. */
+        font-size: clamp(2.5em, 150% + 2vh + 2vw, min(10vmin, 4.5em));
+        font-weight: 800;
+
+        small {
+          display: block;
+          width: fit-content;
+          padding: 0.2em 0.5em;
+          margin-inline: auto;
+          color: white;
+          background: var(--color-neutral-40);
+          font-size: 40%;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+      }
+
+      h2 {
+        font-size: 180%;
+        color: var(--color-neutral-30);
+      }
+
+      h3 {
+        font-size: 130%;
+      }
+
+      /* Lists */
+
+      ul,
+      ol {
+        padding-inline-start: 2em;
+      }
+
+      li {
+        &::marker {
+          color: var(--color-neutral-40);
+        }
+
+        + li {
+          margin-top: 0.2em;
+        }
+      }
+
+      /* Sectioning elements */
+
+      header {
+        padding-block: 1em;
+        text-align: center;
+      }
+
+      main {
+        background: white;
+        color: var(--color-neutral-20);
+        border-radius: 1rem;
+        padding: 0.1rem 2rem;
+      }
+
+      /* Figures */
+
+      figure {
+        margin: 1em 0;
+        padding: 0.5rem;
+        margin-inline: -0.5em;
+        border: 1px solid var(--color-neutral-80);
+        box-shadow: 0 0.1em 0.2em var(--color-neutral-95);
+        text-align: center;
+        background: white;
+
+        /* Scale each chart image down to the figure width, keeping its aspect ratio. */
+        > img {
+          max-width: 100%;
+          height: auto;
+        }
+
+        > figcaption {
+          font: 500 75% var(--font-sans);
+          background: var(--color-neutral-95);
+          padding: 0.5rem;
+          margin: -0.5rem;
+          margin-top: 0.5rem;
+          counter-increment: figure;
+          text-align: left;
+
+          &::before {
+            content: 'Figure ' counter(figure) ': ';
+            font-weight: bold;
+            color: var(--color-neutral-40);
+          }
+
+          a:not(:hover, :focus, :active) {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: color-mix(
+              in lab,
+              currentColor,
+              transparent 70%
+            );
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <small>DSC 209R Project 2</small>
+        Persuasive or Deceptive Visualization?
+      </h1>
+
+      <p><strong>Junda Su</strong> — <em>jundasu@ucsd.edu</em></p>
+    </header>
+
+    <main>
+      <h2>Proposition: Climate change is making natural disasters more frequent.</h2>
+
+      <section>
+        <h3>FOR the Proposition</h3>
+
+        <figure>
+          <img
+            src="chart_1a.png"
+            alt="Bar chart of climate-related disasters per year from 1980 to 2022, with bars colored by global temperature and a rising dashed trend line."
+          />
+          <figcaption>
+            Climate-related disasters per year worldwide, 1980–2022. Bar color shows the global temperature change from
+            the 1951–1980 average. Data: IMF Climate Change Indicators Dashboard (EM-DAT disaster counts; FAO
+            temperature).
+          </figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul>
+          <li>
+            <strong>Bar color shows temperature (−1.5).</strong> Taller bars are also redder, so the chart suggests that
+            heat causes the disasters. However, the data only shows that both rose in the same years. A single neutral color
+            would show the count trend without the implied cause.
+          </li>
+          <li>
+            <strong>One straight trend line for 1980–2022 (−1.5).</strong> The dashed line keeps rising after 2000, but
+            the bars are flat from about 2000 on. Instead, a moving average or a separate trend for each period would show the
+            flat period.
+          </li>
+          <li>
+            <strong>Title and “3.3×” callout (−0.5).</strong> The ratio 347 / 104 is correct, but it compares only two
+            single years. In addition, the title “As the planet heated up” ties the rise to warming before the reader looks at the
+            bars.
+          </li>
+          <li>
+            <strong>Zero-based y-axis and cited source (+2).</strong> Bar heights are proportional to the counts, and
+            the footer names the data sources. These honest choices make the reader trust the rest of the chart.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>AGAINST the Proposition</h3>
+
+        <figure>
+          <img
+            src="chart_2a.png"
+            alt="Two-panel line chart for 2000 to 2022: global temperature rises by 0.7 °C in the top panel, and disasters per year stay near 300 to 400 in the bottom panel."
+          />
+          <figcaption>
+            Global temperature change from the 1951–1980 average (top) and climate-related disasters per year
+            (bottom), 2000–2022, with linear trend lines. Data: IMF Climate Change Indicators Dashboard (EM-DAT
+            disaster counts; FAO temperature).
+          </figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul>
+          <li>
+            <strong>Selective time window (−1).</strong> The chart starts in 2000, after the steepest rise in disaster
+            counts. The footnote gives a true reason (EM-DAT recommends excluding pre-2000 records from trend
+            analysis), so the choice looks neutral.
+          </li>
+          <li>
+            <strong>Compressed disaster scale (−1.5).</strong> The counts stay between 287 and 407, but the axis runs
+            from 0 to 500. This compressed scale makes the disaster line look flat. By comparison, an axis from 250 to 420 would show
+            the year-to-year swings and the rise after 2018.
+          </li>
+          <li>
+            <strong>Honest-looking frame (−0.5).</strong> The top panel shows the warming openly. Because the chart
+            does not hide the warming, the reader also trusts the flat disaster line in the bottom panel.
+          </li>
+          <li>
+            <strong>Computed trend labels (+1).</strong> Each panel states its least-squares slope (+0.7 °C since 2000;
+            −0.6 disasters per year). Both numbers are correct for 2000–2022, so the claim rests on the data and not
+            only on the title.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Final Reflection</h2>
+
+        <p>
+          I built both charts from the same IMF data: EM-DAT counts of climate-related disasters and FAO global
+          temperature change. Arguing for the proposition was straightforward. The count rose from 104 disasters in
+          1980 to 347 in 2022, so the data already supported the claim, and my design work was mostly emphasis: a
+          pointed title, the 3.3× callout, and a red color scale. Arguing against the proposition, on the other hand,
+          was much harder, because no honest view of the full 1980–2022 series hides the rise. Because most of that
+          rise happened before 2000, I had to find a time window and a scale that made the flat period after 2000 look
+          like the whole story without making the reader suspicious.
+        </p>
+
+        <p>
+          What surprised me most was how much the deceptive chart depended on honest elements. For example, Figure 2
+          does not change a single data value. Its footnote is true, because EM-DAT does recommend excluding pre-2000
+          records from trend analysis, and its top panel shows the warming openly. In fact, these honest choices are
+          exactly what make the reader trust the flat disaster line. The same data caveat also worked in opposite
+          directions: in Figure 2 it justified a window that I chose for its result, whereas in Figure 1 I left it
+          out. Neither chart misstates a number, yet the two charts lead readers to opposite conclusions.
+        </p>
+
+        <p>
+          I now define ethical analysis and visualization as presenting data so that a careful reader reaches the
+          conclusion that the full data supports, and can see the choices that shaped it. By that standard,
+          persuasion is acceptable when it adds emphasis to a claim that the data supports, for example a pointed
+          title, a highlight color, or a callout of a correct number. However, persuasion becomes misleading when a
+          choice changes the conclusion that a reader would draw from the full data, or implies a claim that the data
+          cannot support. Two tests helped me draw this line. First, would the conclusion survive if the reader saw the
+          data that the chart leaves out? Figure 2 fails this test, and a true footnote does not fix it, because the
+          result chose the window, not the reason in the footnote. By contrast, starting Figure 1 in 1980 passes this
+          test, because 1980 is the start of the full dataset, although an honest version would still mention the
+          EM-DAT caveat. Second, does an encoding imply something that the data cannot show? This time Figure 1 fails:
+          its temperature-colored bars suggest that heat causes disasters, while the data only shows that both rose
+          over the same years.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
