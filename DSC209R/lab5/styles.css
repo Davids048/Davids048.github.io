@@ -1,0 +1,278 @@
+/* Site-wide design tokens. The accent color is reused by nav hover states and
+   form controls, so it lives on :root where every element can inherit it.
+   color-scheme lets the browser follow the OS light or dark setting; global.js
+   overrides it when the visitor picks a color scheme. The border color is
+   semi-transparent so it stays subtle on both light and dark backgrounds. */
+:root {
+    --color-accent: oklch(65% 50% 0);
+    --color-border: oklch(50% 10% 200 / 40%);
+    accent-color: var(--color-accent);
+    color-scheme: light dark;
+}
+
+/* Keep body text at a readable line length and center it in the viewport. */
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.3;
+    max-width: 100ch;
+    margin-inline: auto;
+    padding: 1em;
+}
+
+/* Headings: tighter leading than body text and balanced line breaks. */
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: 400%;
+}
+
+.li-publication {
+    margin: 10px
+}
+
+/* Navigation bar: each link takes an equal share of the row. */
+nav {
+    display: flex;
+    margin-bottom: 1em;
+    border-bottom: 1px solid var(--color-border);
+
+    ul, li {
+        display: contents;
+    }
+
+    a {
+        flex: 1;
+        text-decoration: none;
+        color: inherit;
+        text-align: center;
+        padding: 0.5em;
+
+        /* Thick bottom border marks the current page; reduced padding keeps
+           the link height equal to its siblings. */
+        &.current {
+            border-bottom: 0.4em solid var(--color-border);
+            padding-bottom: 0.1em;
+        }
+
+        &:hover {
+            border-bottom: 0.4em solid var(--color-accent);
+            padding-bottom: 0.1em;
+            /* Mixing with the canvas system color keeps the hover background
+               faint in both light and dark mode. */
+            background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
+        }
+    }
+}
+
+/* Color scheme switcher created by global.js, pinned to the top right corner of the
+   page outside the normal document flow. */
+.color-scheme {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 80%;
+}
+
+/* Form controls, including the color scheme select, use the page font instead
+   of the browser's default control font. */
+input, textarea, button, select {
+    font: inherit;
+}
+
+/* Contact form: two-column grid with label text on the left and the control
+   on the right. Each label is a subgrid so its children align to the form grid. */
+form {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1em;
+
+    label {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column: 1 / -1;
+    }
+
+    button {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Projects page: as many 15em-wide columns as fit, with each article spanning
+   three subgrid rows so headings, images, and text align across columns. */
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: 1em;
+
+    article {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: span 3;
+
+        h2 {
+            margin: 0;
+        }
+
+        img {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            object-fit: contain;
+        }
+
+        /* Oldstyle numerals make the year blend with the surrounding text. */
+        .project-year {
+            margin: 0;
+            font-family: Baskerville, serif;
+            font-variant-numeric: oldstyle-nums;
+            color: gray;
+        }
+    }
+}
+
+/* Projects page: the pie chart and its legend sit side by side, and the legend
+   takes all of the width that the pie chart leaves. On a narrow screen the
+   legend wraps below the pie chart. */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2em;
+
+    .legend {
+        flex: 1;
+    }
+}
+
+/* Pie chart of projects per year drawn by projects.js. */
+#projects-pie-plot {
+    max-width: 20em;
+    margin-block: 2em;
+    overflow: visible;
+
+    path {
+        transition: 300ms;
+        cursor: pointer;
+    }
+
+    /* :has(path:hover) fades the other wedges only while a wedge is hovered,
+       so hovering the empty corners of the SVG fades nothing. */
+    &:has(path:hover) {
+        path:not(:hover) {
+            opacity: 0.5;
+        }
+    }
+}
+
+/* Legend of the pie chart: as many 9em-wide columns as fit. The gap inside each
+   item is smaller than the gap between items, so a swatch groups with its label. */
+.legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+    gap: 1em;
+    margin: 0;
+    padding: 1em;
+    border: 1px solid var(--color-border);
+    list-style: none;
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+    }
+
+    .swatch {
+        display: inline-block;
+        width: 1em;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background-color: var(--color);
+    }
+}
+
+/* The selected wedge and its legend item. !important is required to override
+   the --color value that projects.js sets in each legend item's style attribute.
+   Magenta differs from every Tableau 10 wedge color. */
+.selected {
+    --color: oklch(55% 60% 330) !important;
+
+    &:is(path) {
+        fill: var(--color);
+    }
+}
+
+/* Project search field, as wide as the project grid. */
+.searchBar {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-block-end: 1em;
+    padding: 0.5em;
+}
+
+/* GitHub profile stats on the home page: four equal columns, with every term (dt)
+   on the first row and its value (dd) on the second row, below the term. */
+#profile-stats dl {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    dt {
+        grid-row: 1;
+    }
+
+    dd {
+        grid-row: 2;
+        margin: 0;
+        font-size: 200%;
+    }
+}
+
+/* CV page: each entry puts its title/role on the left and dates on the right. */
+.cv {
+    section {
+        margin-block: 2em;
+    }
+
+    h2 {
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 0.2em;
+        color: var(--color-accent);
+    }
+
+    article {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        column-gap: 1em;
+        margin-block: 1.5em;
+
+        header {
+            grid-column: 1;
+        }
+
+        header + p {
+            grid-column: 2;
+            text-align: right;
+            margin: 0;
+            color: oklch(50% 0% 0);
+        }
+
+        ul {
+            grid-column: 1 / -1;
+        }
+    }
+
+    h3 {
+        margin: 0;
+    }
+
+    header p {
+        margin-block: 0.2em;
+    }
+
+    time {
+        white-space: nowrap;
+    }
+}
