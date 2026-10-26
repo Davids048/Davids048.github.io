@@ -125,6 +125,23 @@ form {
     }
 }
 
+/* GitHub profile stats on the home page: four equal columns, with every term (dt)
+   on the first row and its value (dd) on the second row, below the term. */
+#profile-stats dl {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    dt {
+        grid-row: 1;
+    }
+
+    dd {
+        grid-row: 2;
+        margin: 0;
+        font-size: 200%;
+    }
+}
+
 /* CV page: each entry puts its title/role on the left and dates on the right. */
 .cv {
     section {

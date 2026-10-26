@@ -17,12 +17,12 @@ let pages = [
 ];
 
 // A local server (for example, VS Code Live Server opened on this folder) serves
-// this site from the server root. GitHub Pages serves it from the lab3/ folder
-// of the Davids048.github.io site, at https://davids048.github.io/lab3/.
+// this site from the server root. GitHub Pages serves it from the DSC209R/lab4/
+// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab4/.
 const BASE_PATH =
     location.hostname === 'localhost' || location.hostname === '127.0.0.1'
         ? '/'
-        : '/lab3/';
+        : '/DSC209R/lab4/';
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
@@ -78,3 +78,45 @@ colorSchemeSelect.addEventListener('input', function (event) {
     setColorScheme(event.target.value);
     localStorage.colorScheme = event.target.value;
 });
+
+// Fetch a JSON file and return its parsed contents. A failed request is logged
+// to the console, and the function then returns undefined.
+export async function fetchJSON(url) {
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching or parsing JSON data:', error);
+    }
+}
+
+// Render one <article> per project into containerElement and replace what the
+// container held before. headingLevel is the tag for each project title. A
+// relative image path in the project data is a path from the site root, so the
+// same lib/projects.json file works on the home page and on the projects page.
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+    containerElement.innerHTML = '';
+
+    for (let project of projects) {
+        let image = project.image.startsWith('http') ? project.image : BASE_PATH + project.image;
+
+        let article = document.createElement('article');
+        article.innerHTML = `
+            <${headingLevel}>${project.title}</${headingLevel}>
+            <img src="${image}" alt="${project.title}">
+            <p>${project.description}</p>
+        `;
+        containerElement.appendChild(article);
+    }
+}
+
+// Fetch the public profile of a GitHub user from the GitHub REST API.
+export async function fetchGitHubData(username) {
+    return fetchJSON(`https://api.github.com/users/${username}`);
+}
