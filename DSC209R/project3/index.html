@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project 3: Climate Disasters</title>
+    <style>
+      :root {
+        --color-neutral-95: hsl(220 10% 95%);
+        --color-neutral-90: hsl(220 10% 90%);
+        --color-neutral-80: hsl(220 10% 80%);
+        --color-neutral-70: hsl(220 10% 70%);
+        --color-neutral-60: hsl(220 10% 60%);
+        --color-neutral-50: hsl(220 10% 50%);
+        --color-neutral-40: hsl(220 10% 40%);
+        --color-neutral-30: hsl(220 10% 30%);
+        --color-neutral-20: hsl(220 10% 20%);
+        --color-neutral-10: hsl(220 10% 10%);
+      }
+
+      html {
+        font: 100%/1.5 system-ui;
+        counter-reset: figure;
+        background: var(--color-neutral-95);
+        max-width: min(75vw, 80em);
+        margin: 0 auto;
+      }
+
+      /* Headings */
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+
+      h1,
+      h2 {
+        border-bottom: 1px solid var(--color-neutral-80);
+        padding-bottom: 0.2em;
+      }
+
+      h1 {
+        margin-block: 1em 0.5rem;
+        /* The 4.5em cap keeps the title on at most two lines in large windows. */
+        font-size: clamp(2.5em, 150% + 2vh + 2vw, min(10vmin, 4.5em));
+        font-weight: 800;
+
+        small {
+          display: block;
+          width: fit-content;
+          padding: 0.2em 0.5em;
+          margin-inline: auto;
+          color: white;
+          background: var(--color-neutral-40);
+          font-size: 40%;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+      }
+
+      h2 {
+        font-size: 180%;
+        color: var(--color-neutral-30);
+      }
+
+      h3 {
+        font-size: 130%;
+      }
+
+      /* Lists */
+
+      ul,
+      ol {
+        padding-inline-start: 2em;
+      }
+
+      li {
+        &::marker {
+          color: var(--color-neutral-40);
+        }
+
+        + li {
+          margin-top: 0.2em;
+        }
+      }
+
+      /* Sectioning elements */
+
+      header {
+        padding-block: 1em;
+        text-align: center;
+      }
+
+      main {
+        background: white;
+        color: var(--color-neutral-20);
+        border-radius: 1rem;
+        padding: 0.1rem 2rem;
+      }
+
+      /* Figures */
+
+      figure {
+        margin: 1em 0;
+        padding: 0.5rem;
+        margin-inline: -0.5em;
+        border: 1px solid var(--color-neutral-80);
+        box-shadow: 0 0.1em 0.2em var(--color-neutral-95);
+        text-align: center;
+        background: white;
+
+        /* Scale each chart image down to the figure width, keeping its aspect ratio. */
+        > img {
+          max-width: 100%;
+          height: auto;
+        }
+
+        > figcaption {
+          font: 500 75% var(--font-sans);
+          background: var(--color-neutral-95);
+          padding: 0.5rem;
+          margin: -0.5rem;
+          margin-top: 0.5rem;
+          counter-increment: figure;
+          text-align: left;
+
+          &::before {
+            content: 'Figure ' counter(figure) ': ';
+            font-weight: bold;
+            color: var(--color-neutral-40);
+          }
+
+          a:not(:hover, :focus, :active) {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: color-mix(
+              in lab,
+              currentColor,
+              transparent 70%
+            );
+          }
+        }
+      }
+
+      /* Exploratory graphs: two columns of figures on wide screens, one column on narrow screens. */
+      .explore-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 26em), 1fr));
+        gap: 1em;
+
+        figure {
+          margin: 0;
+        }
+      }
+
+      .question {
+        font-size: 130%;
+        font-weight: 600;
+        color: var(--color-neutral-20);
+      }
+
+      /* Interactive chart: filters in one row above the charts, the two time charts on the left, and the
+         country ranking on the right. On a narrow screen the ranking moves below the time charts. */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75em 1.5em;
+        margin-block: 1em;
+        font-size: 90%;
+
+        input {
+          font: inherit;
+          padding: 0.3em 0.5em;
+          width: 14em;
+        }
+
+        button {
+          font: inherit;
+          cursor: pointer;
+        }
+      }
+
+      #type-toggles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4em;
+
+        button {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4em;
+          padding: 0.2em 0.6em;
+          border: 1px solid var(--color-neutral-80);
+          border-radius: 1em;
+          background: white;
+          color: var(--color-neutral-20);
+        }
+
+        button[aria-pressed='false'] {
+          color: var(--color-neutral-60);
+          text-decoration: line-through;
+
+          .swatch {
+            background: var(--color-neutral-90);
+          }
+        }
+
+        .swatch {
+          width: 0.8em;
+          height: 0.8em;
+          border-radius: 2px;
+          background: var(--color);
+        }
+      }
+
+      #summary {
+        font-size: 110%;
+        font-weight: 600;
+        margin-block: 0.5em;
+      }
+
+      .viz-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(16em, 1fr);
+        gap: 1.5em;
+
+        @media (width < 60em) {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        h3 {
+          font-size: 95%;
+          margin-block: 0.5em 0.25em;
+          color: var(--color-neutral-30);
+        }
+
+        svg {
+          display: block;
+          overflow: visible;
+          font: 12px system-ui;
+        }
+      }
+
+      .grid line {
+        stroke: var(--color-neutral-90);
+      }
+
+      .grid text,
+      .x-axis text {
+        fill: var(--color-neutral-40);
+      }
+
+      .x-axis .domain,
+      .x-axis line,
+      .baseline {
+        stroke: var(--color-neutral-60);
+      }
+
+      .hover-rule {
+        stroke: var(--color-neutral-20);
+        stroke-width: 1;
+        pointer-events: none;
+        visibility: hidden;
+      }
+
+      .brush .selection {
+        fill: var(--color-neutral-20);
+        fill-opacity: 0.08;
+        stroke: var(--color-neutral-40);
+      }
+
+      .no-data {
+        fill: var(--color-neutral-50);
+      }
+
+      #chart-ranking {
+        .rank {
+          cursor: pointer;
+          outline: none;
+        }
+
+        .hit {
+          fill: transparent;
+        }
+
+        .bar {
+          fill: var(--color-neutral-70);
+        }
+
+        .name,
+        .value {
+          fill: var(--color-neutral-30);
+        }
+
+        .rank:is(:hover, :focus-visible) .hit {
+          fill: var(--color-neutral-95);
+        }
+
+        .rank.selected .bar {
+          fill: var(--color-neutral-20);
+        }
+
+        .rank.selected .name {
+          font-weight: 700;
+          fill: var(--color-neutral-10);
+        }
+      }
+
+      .chart-note {
+        font-size: 80%;
+        color: var(--color-neutral-40);
+      }
+
+      #tooltip {
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+        min-width: 11em;
+        padding: 0.5em 0.75em;
+        background: white;
+        border: 1px solid var(--color-neutral-80);
+        border-radius: 0.4em;
+        box-shadow: 0 0.2em 0.6em hsl(220 10% 20% / 15%);
+        font-size: 80%;
+        color: var(--color-neutral-20);
+
+        .tooltip-title {
+          color: var(--color-neutral-40);
+        }
+
+        .tooltip-total {
+          font-size: 130%;
+          font-weight: 700;
+          margin-bottom: 0.3em;
+        }
+
+        .tooltip-row {
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+
+          .key {
+            width: 0.9em;
+            height: 2px;
+          }
+
+          strong {
+            min-width: 2em;
+            text-align: right;
+          }
+        }
+
+        .tooltip-temperature {
+          margin-top: 0.3em;
+          color: var(--color-neutral-40);
+        }
+      }
+    </style>
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <small>DSC 209R Project 3 · Checkpoint</small>
+        Where Are Climate Disasters Rising?
+      </h1>
+      <p>Team: TEAM NAME — Junda Su, TEAMMATE, TEAMMATE</p>
+    </header>
+
+    <main>
+      <h2>Dataset</h2>
+      <p>
+        We use the IMF Climate Change Indicators Dashboard. It contains two tables that we join by country and year:
+      </p>
+      <ul>
+        <li>
+          <strong>Climate-related disasters (EM-DAT):</strong> the number of recorded disasters per year from 1980 to
+          2022, for 215 countries and 6 types (flood, storm, landslide, drought, extreme temperature, and wildfire).
+        </li>
+        <li>
+          <strong>Temperature change (FAO):</strong> each country's yearly temperature change in °C from its 1951–1980
+          average.
+        </li>
+      </ul>
+      <p>
+        We use the yearly counts by type and country, the yearly temperature change of each country, and the World
+        totals (the sum over all countries). One caveat: EM-DAT counts the disasters that were reported, and reporting
+        improved over time, especially before 2000.
+      </p>
+
+      <h2>Exploratory Graphs</h2>
+      <div class="explore-grid">
+        <figure>
+          <img src="explore/01_world_total.png" alt="Recorded climate disasters rose 2.5× since the 1980s, then leveled off after 2000" width="1600" height="900" />
+          <figcaption>Worldwide recorded disasters averaged 133 per year in 1980–1989 and 331 per year in 2013–2022 (2.5×), with most of the rise before 2000 and a peak of 407 in 2005.</figcaption>
+        </figure>
+        <figure>
+          <img src="explore/02_by_type.png" alt="Floods and storms account for 86% of the rise in recorded disasters" width="1600" height="900" />
+          <figcaption>Of the rise of 198 disasters per year between 1980–1989 and 2013–2022, floods (+115) and storms (+55) account for 86% (all types: flood +115, storm +55, extreme temperature +10, wildfire +7, landslide +7, drought +4).</figcaption>
+        </figure>
+        <figure>
+          <img src="explore/03_world_temperature.png" alt="World temperatures in 2013–2022 averaged 1.4 °C above the 1951–1980 baseline" width="1600" height="900" />
+          <figcaption>World temperature change rose from +0.00 °C in 1961–1970 to +1.39 °C in 2013–2022 relative to 1951–1980, with the warmest year 2020 at +1.71 °C.</figcaption>
+        </figure>
+        <figure>
+          <img src="explore/04_top_countries.png" alt="The United States and China recorded the most climate disasters since 1980: 912 and 738" width="1600" height="900" />
+          <figcaption>The United States (912) and China (738) lead, followed by India (523), Philippines (478), Indonesia (334); the top 15 countries hold 43% of all 11,313 recorded disasters.</figcaption>
+        </figure>
+        <figure>
+          <img src="explore/05_reporting_countries.png" alt="The number of countries with a recorded disaster nearly doubled, from 62 to 112 a year" width="1600" height="900" />
+          <figcaption>The number of countries with at least one recorded disaster rose from an average of 62 per year in 1980–1989 to 112 in 2013–2022 (1.8×), so wider reporting may explain part of the rise in disaster counts.</figcaption>
+        </figure>
+        <figure>
+          <img src="explore/06_warming_vs_change.png" alt="Countries that warmed more did not see larger rises in disasters" width="1600" height="900" />
+          <figcaption>Across 195 countries, 2013–2022 warming and the change in disasters per year are barely related (Pearson r = -0.07, Spearman ρ = -0.01).</figcaption>
+        </figure>
+      </div>
+
+      <h2>Question</h2>
+      <p class="question">
+        Which kinds of climate-related disasters became more common since 1980, and in which countries?
+      </p>
+
+      <h2>Interactive Chart (Prototype)</h2>
+      <div class="controls">
+        <label>
+          Place:
+          <input id="place-input" list="place-names" placeholder="Type a country" />
+          <datalist id="place-names"></datalist>
+        </label>
+        <button id="reset-place" type="button">Show World</button>
+        <div id="type-toggles" aria-label="Disaster types"></div>
+      </div>
+      <p id="summary"></p>
+      <div class="viz-grid">
+        <div>
+          <h3>Disasters per year by type: <span id="place-name"></span></h3>
+          <svg id="chart-area" role="img" aria-label="Stacked area chart of disasters per year by type"></svg>
+          <h3>Temperature change from the 1951–1980 average</h3>
+          <svg id="chart-temperature" role="img" aria-label="Bar chart of temperature change per year"></svg>
+        </div>
+        <div>
+          <h3>Countries with the most disasters, <span id="ranking-years"></span></h3>
+          <svg id="chart-ranking" aria-label="Ranking of countries by number of disasters"></svg>
+          <p class="chart-note">Click a country to show it in the charts on the left.</p>
+        </div>
+      </div>
+      <p class="chart-note">
+        How to use: type a country or click one in the ranking, click a disaster type to hide or show it, and drag
+        across the top chart to pick a range of years for the ranking (click the chart once to reset). Counts are
+        EM-DAT climate-related disasters, summed over the visible types; World is the sum of all countries. Source:
+        IMF Climate Change Indicators Dashboard (EM-DAT disaster counts; FAO temperature change).
+      </p>
+
+      <h3>Next steps</h3>
+      <ul>
+        <li>Add a world map colored by disasters in the selected years, linked to the ranking and the time charts.</li>
+        <li>Show each country's change between two periods (for example 1980–1999 and 2000–2022), not only totals.</li>
+        <li>Add a table view of the selected country's counts, and polish the tooltip and the mobile layout.</li>
+      </ul>
+    </main>
+    <div id="tooltip" role="status"></div>
+  </body>
+</html>

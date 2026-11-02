@@ -1,0 +1,32 @@
+[
+  {
+    "file": "01_world_total.png",
+    "title": "Recorded climate disasters rose 2.5× since the 1980s, then leveled off after 2000",
+    "finding": "Worldwide recorded disasters averaged 133 per year in 1980–1989 and 331 per year in 2013–2022 (2.5×), with most of the rise before 2000 and a peak of 407 in 2005."
+  },
+  {
+    "file": "02_by_type.png",
+    "title": "Floods and storms account for 86% of the rise in recorded disasters",
+    "finding": "Of the rise of 198 disasters per year between 1980–1989 and 2013–2022, floods (+115) and storms (+55) account for 86% (all types: flood +115, storm +55, extreme temperature +10, wildfire +7, landslide +7, drought +4)."
+  },
+  {
+    "file": "03_world_temperature.png",
+    "title": "World temperatures in 2013–2022 averaged 1.4 °C above the 1951–1980 baseline",
+    "finding": "World temperature change rose from +0.00 °C in 1961–1970 to +1.39 °C in 2013–2022 relative to 1951–1980, with the warmest year 2020 at +1.71 °C."
+  },
+  {
+    "file": "04_top_countries.png",
+    "title": "The United States and China recorded the most climate disasters since 1980: 912 and 738",
+    "finding": "The United States (912) and China (738) lead, followed by India (523), Philippines (478), Indonesia (334); the top 15 countries hold 43% of all 11,313 recorded disasters."
+  },
+  {
+    "file": "05_reporting_countries.png",
+    "title": "The number of countries with a recorded disaster nearly doubled, from 62 to 112 a year",
+    "finding": "The number of countries with at least one recorded disaster rose from an average of 62 per year in 1980–1989 to 112 in 2013–2022 (1.8×), so wider reporting may explain part of the rise in disaster counts."
+  },
+  {
+    "file": "06_warming_vs_change.png",
+    "title": "Countries that warmed more did not see larger rises in disasters",
+    "finding": "Across 195 countries, 2013–2022 warming and the change in disasters per year are barely related (Pearson r = -0.07, Spearman ρ = -0.01)."
+  }
+]
