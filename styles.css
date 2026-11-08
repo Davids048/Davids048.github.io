@@ -276,3 +276,102 @@ form {
         white-space: nowrap;
     }
 }
+
+/* Meta page summary stats: one column per stat, with each term (dt) above its
+   value (dd). The language breakdown below the chart reuses this layout. */
+dl.stats {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: auto auto;
+    gap: 0.2em 1em;
+
+    dt {
+        grid-row: 1;
+        font-size: 80%;
+        text-transform: uppercase;
+        color: gray;
+    }
+
+    dd {
+        grid-row: 2;
+        margin: 0;
+        font-size: 150%;
+    }
+}
+
+/* Faint horizontal grid lines behind the commit scatterplot. */
+.gridlines .tick line {
+    stroke: var(--color-border);
+    stroke-opacity: 0.5;
+}
+
+.gridlines .domain {
+    display: none;
+}
+
+/* Dots grow from their center on hover. */
+circle {
+    transition: 200ms;
+    transform-origin: center;
+    transform-box: fill-box;
+
+    &:hover {
+        transform: scale(1.5);
+    }
+}
+
+circle.selected {
+    fill: #ff6b6b;
+}
+
+/* Key-value list: labels (dt) in the 1st column, values (dd) in the 2nd. It
+   fades out when the hidden attribute is set. */
+dl.info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2em 1em;
+    margin: 0;
+    transition-duration: 500ms;
+    transition-property: opacity, visibility;
+
+    dt {
+        color: gray;
+    }
+
+    dd {
+        margin: 0;
+    }
+
+    &[hidden]:not(:hover, :focus-within) {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Floating tooltip that main.js moves next to the mouse cursor. */
+.tooltip {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    width: max-content;
+    padding: 0.6em 0.8em;
+    border-radius: 0.4em;
+    background-color: color-mix(in oklch, canvas, transparent 15%);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px oklch(0% 0 0 / 25%);
+}
+
+/* Brush selection rectangle with a moving dashed border. */
+@keyframes marching-ants {
+    to {
+        stroke-dashoffset: -8; /* 5 + 3 */
+    }
+}
+
+.selection {
+    fill-opacity: 0.1;
+    stroke: currentColor;
+    stroke-opacity: 0.7;
+    stroke-dasharray: 5 3;
+    animation: marching-ants 2s linear infinite;
+}

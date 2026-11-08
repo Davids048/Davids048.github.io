@@ -13,16 +13,17 @@ let pages = [
     { url: 'projects/', title: 'Projects' },
     { url: 'contact/', title: 'Contact' },
     { url: 'cv/', title: 'CV' },
+    { url: 'meta/', title: 'Meta' },
     { url: 'https://github.com/Davids048', title: 'GitHub' },
 ];
 
 // A local server (for example, VS Code Live Server opened on this folder) serves
-// this site from the server root. GitHub Pages serves it from the DSC209R/lab5/
-// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab5/.
+// this site from the server root. GitHub Pages serves it from the DSC209R/lab6/
+// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab6/.
 const BASE_PATH =
     location.hostname === 'localhost' || location.hostname === '127.0.0.1'
         ? '/'
-        : '/DSC209R/lab5/';
+        : '/DSC209R/lab6/';
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
