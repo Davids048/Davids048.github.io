@@ -21,6 +21,9 @@ const state = {
     place: 'WLD',
     activeTypes: new Set(data.types),
     yearRange: [years[0], years.at(-1)],
+    // 'total' ranks countries by disasters in the selected years; 'change' ranks them by the rise in disasters per
+    // year from the first half of the selected years to the second half.
+    measure: 'total',
 };
 
 const areaSvg = d3.select('#chart-area');
@@ -67,6 +70,10 @@ function setUpPlacePicker() {
         }
     });
     d3.select('#reset-place').on('click', () => selectPlace('WLD'));
+    d3.select('#ranking-measure').on('change', (event) => {
+        state.measure = event.target.value;
+        renderRanking();
+    });
 }
 
 /** Draw one toggle button per disaster type. A hidden type is removed from every view. */
@@ -128,7 +135,7 @@ function renderArea(width) {
 
     areaSvg.selectAll('.x-axis').data([null]).join('g').attr('class', 'x-axis')
         .attr('transform', `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(9).tickFormat(d3.format('d')));
+        .call(d3.axisBottom(x).ticks(Math.min(9, width / 70)).tickFormat(d3.format('d')));
 
     let brush = d3.brushX()
         .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
@@ -192,40 +199,73 @@ function renderTemperature(width) {
 
     temperatureSvg.selectAll('.x-axis').data([null]).join('g').attr('class', 'x-axis')
         .attr('transform', `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(9).tickFormat(d3.format('d')));
+        .call(d3.axisBottom(x).ticks(Math.min(9, width / 70)).tickFormat(d3.format('d')));
 
     temperatureSvg.selectAll('.hover-rule').data([null]).join('line').attr('class', 'hover-rule')
         .attr('y1', margin.top).attr('y2', height - margin.bottom);
 }
 
+// Split the selected years into a first half and a second half of equal length (the middle year of an odd range
+// is left out), so the 'change' measure compares two periods of the same length.
+function rangeHalves() {
+    let [start, end] = state.yearRange;
+    let half = Math.floor((end - start + 1) / 2);
+    return [[start, start + half - 1], [end - half + 1, end]];
+}
+
+// Return a place's disasters in the visible types, summed over the years from start to end.
+function sumYears(place, start, end) {
+    let first = years.indexOf(start);
+    let last = years.indexOf(end);
+    return d3.sum(activeTypes(), (type) => d3.sum(place.counts[type].slice(first, last + 1)));
+}
+
 /**
- * Draw the countries with the most disasters in the selected years and types. Clicking a bar (or pressing Enter
- * on it) shows that country in the time charts.
+ * Draw the top countries for the selected years and types, ranked by total disasters or by the rise in disasters
+ * per year. Clicking a bar (or pressing Enter on it) shows that country in the time charts.
  */
 function renderRanking() {
     let width = rankingSvg.node().parentElement.clientWidth;
     let barHeight = 22;
-    let rankingMargin = { top: 4, right: 44, bottom: 4, left: 110 };
+    let rankingMargin = { top: 4, right: 64, bottom: 4, left: 110 };
     let [start, end] = state.yearRange;
-    let first = years.indexOf(start);
-    let last = years.indexOf(end);
+    let [[a0, a1], [b0, b1]] = rangeHalves();
+    let halfLength = a1 - a0 + 1;
+    // A change needs at least two years; with one selected year the ranking falls back to totals.
+    let measure = state.measure === 'change' && halfLength > 0 ? 'change' : 'total';
 
     let totals = data.places
         .filter((place) => place.iso3 !== 'WLD')
-        .map((place) => ({
-            iso3: place.iso3,
-            name: place.name,
-            total: d3.sum(activeTypes(), (type) => d3.sum(place.counts[type].slice(first, last + 1))),
-        }))
-        .sort((a, b) => b.total - a.total)
+        .map((place) => {
+            let before = sumYears(place, a0, a1) / halfLength;
+            let after = sumYears(place, b0, b1) / halfLength;
+            let total = sumYears(place, start, end);
+            return {
+                iso3: place.iso3,
+                name: place.name,
+                total,
+                before,
+                after,
+                value: measure === 'change' ? after - before : total,
+            };
+        })
+        .sort((a, b) => b.value - a.value)
         .slice(0, RANKING_SIZE);
 
+    let span = (s, e) => (s === e ? `${s}` : `${s}–${e}`);
+    let format = measure === 'change' ? (v) => `${v > 0 ? '+' : ''}${v.toFixed(1)}/yr` : (v) => `${v}`;
+
     let height = rankingMargin.top + rankingMargin.bottom + totals.length * barHeight;
-    let xRank = d3.scaleLinear([0, d3.max(totals, (d) => d.total) || 1],
+    let xRank = d3.scaleLinear([0, d3.max(totals, (d) => d.value) || 1],
         [rankingMargin.left, width - rankingMargin.right]);
 
     rankingSvg.attr('viewBox', [0, 0, width, height]).attr('width', width).attr('height', height);
-    d3.select('#ranking-years').text(start === end ? `${start}` : `${start}–${end}`);
+    d3.select('#ranking-title').text(measure === 'change'
+        ? 'Countries where disasters rose the most'
+        : `Countries with the most disasters, ${span(start, end)}`);
+    d3.select('#ranking-subtitle').text(measure === 'change'
+        ? `Average disasters per year in ${span(b0, b1)} minus ${span(a0, a1)}, visible types only.`
+        : 'Total recorded disasters in the selected years, visible types only.');
 
     let rows = rankingSvg.selectAll('g.rank')
         .data(totals, (d) => d.iso3)
@@ -235,11 +275,12 @@ function renderRanking() {
             g.append('rect').attr('class', 'bar');
             g.append('text').attr('class', 'name');
             g.append('text').attr('class', 'value');
+            g.append('title');
             return g;
         })
         .attr('transform', (d, i) => `translate(0,${rankingMargin.top + i * barHeight})`)
         .classed('selected', (d) => d.iso3 === state.place)
-        .attr('aria-label', (d) => `${d.name}: ${d.total} disasters`)
+        .attr('aria-label', (d) => `${d.name}: ${format(d.value)}`)
         .on('click', (event, d) => selectPlace(d.iso3))
         .on('keydown', (event, d) => {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -248,13 +289,16 @@ function renderRanking() {
             }
         });
 
+    // Details on demand: the hover title gives the total and both period averages, whatever the measure.
+    rows.select('title').text((d) => `${d.name}: ${d.total} disasters in ${span(start, end)}\n`
+        + `${d.before.toFixed(1)}/yr in ${span(a0, a1)} → ${d.after.toFixed(1)}/yr in ${span(b0, b1)}`);
     rows.select('.hit').attr('x', 0).attr('width', width).attr('height', barHeight);
     rows.select('.bar')
         .attr('x', rankingMargin.left)
         .attr('y', 3)
         .attr('height', barHeight - 6)
         .attr('rx', 2)
-        .attr('width', (d) => Math.max(1, xRank(d.total) - rankingMargin.left));
+        .attr('width', (d) => Math.max(1, xRank(Math.max(0, d.value)) - rankingMargin.left));
     rows.select('.name')
         .attr('x', rankingMargin.left - 8)
         .attr('y', barHeight / 2)
@@ -262,10 +306,10 @@ function renderRanking() {
         .attr('text-anchor', 'end')
         .text((d) => d.name);
     rows.select('.value')
-        .attr('x', (d) => xRank(d.total) + 6)
+        .attr('x', (d) => xRank(Math.max(0, d.value)) + 6)
         .attr('y', barHeight / 2)
         .attr('dy', '0.35em')
-        .text((d) => d.total);
+        .text((d) => format(d.value));
 }
 
 /** Write the one-line summary above the charts, for example "World: 104 disasters in 1980, 347 in 2022." */
@@ -325,6 +369,10 @@ function hideYear() {
 
 function render() {
     let width = areaSvg.node().parentElement.clientWidth;
+    // A hidden page has no width yet; the ResizeObserver below draws the charts once it has one.
+    if (width === 0) {
+        return;
+    }
     renderArea(width);
     renderTemperature(width);
     renderRanking();

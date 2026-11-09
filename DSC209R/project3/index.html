@@ -26,6 +26,17 @@
         margin: 0 auto;
       }
 
+      /* Use the full width of a phone screen, keeping a 16px gutter on each side. */
+      @media (width < 40em) {
+        html {
+          max-width: calc(100vw - 32px);
+        }
+
+        main {
+          padding-inline: 1rem;
+        }
+      }
+
       /* Headings */
 
       h1,
@@ -181,10 +192,17 @@
           width: 14em;
         }
 
-        button {
+        button,
+        select {
           font: inherit;
           cursor: pointer;
         }
+      }
+
+      .chart-subtitle {
+        margin-block: 0 0.4em;
+        font-size: 80%;
+        color: var(--color-neutral-40);
       }
 
       #type-toggles {
@@ -368,7 +386,7 @@
   <body>
     <header>
       <h1>
-        <small>DSC 209R Project 3 · Checkpoint</small>
+        <small>DSC 209R Project 3 · Interactive Visualization</small>
         Where Are Climate Disasters Rising?
       </h1>
       <p><strong>Junda Su</strong> — <em>jundasu@ucsd.edu</em></p>
@@ -396,40 +414,17 @@
         improved over time, especially before 2000.
       </p>
 
-      <h2>Exploratory Graphs</h2>
-      <div class="explore-grid">
-        <figure>
-          <img src="explore/01_world_total.png" alt="Recorded climate disasters rose 2.5× since the 1980s, then leveled off after 2000" width="1600" height="900" />
-          <figcaption>Worldwide recorded disasters averaged 133 per year in 1980–1989 and 331 per year in 2013–2022 (2.5×), with most of the rise before 2000 and a peak of 407 in 2005.</figcaption>
-        </figure>
-        <figure>
-          <img src="explore/02_by_type.png" alt="Floods and storms account for 86% of the rise in recorded disasters" width="1600" height="900" />
-          <figcaption>Of the rise of 198 disasters per year between 1980–1989 and 2013–2022, floods (+115) and storms (+55) account for 86% (all types: flood +115, storm +55, extreme temperature +10, wildfire +7, landslide +7, drought +4).</figcaption>
-        </figure>
-        <figure>
-          <img src="explore/03_world_temperature.png" alt="World temperatures in 2013–2022 averaged 1.4 °C above the 1951–1980 baseline" width="1600" height="900" />
-          <figcaption>World temperature change rose from +0.00 °C in 1961–1970 to +1.39 °C in 2013–2022 relative to 1951–1980, with the warmest year 2020 at +1.71 °C.</figcaption>
-        </figure>
-        <figure>
-          <img src="explore/04_top_countries.png" alt="The United States and China recorded the most climate disasters since 1980: 912 and 738" width="1600" height="900" />
-          <figcaption>The United States (912) and China (738) lead, followed by India (523), Philippines (478), Indonesia (334); the top 15 countries hold 43% of all 11,313 recorded disasters.</figcaption>
-        </figure>
-        <figure>
-          <img src="explore/05_reporting_countries.png" alt="The number of countries with a recorded disaster nearly doubled, from 62 to 112 a year" width="1600" height="900" />
-          <figcaption>The number of countries with at least one recorded disaster rose from an average of 62 per year in 1980–1989 to 112 in 2013–2022 (1.8×), so wider reporting may explain part of the rise in disaster counts.</figcaption>
-        </figure>
-        <figure>
-          <img src="explore/06_warming_vs_change.png" alt="Countries that warmed more did not see larger rises in disasters" width="1600" height="900" />
-          <figcaption>Across 195 countries, 2013–2022 warming and the change in disasters per year are barely related (Pearson r = -0.07, Spearman ρ = -0.01).</figcaption>
-        </figure>
-      </div>
-
       <h2>Question</h2>
       <p class="question">
         Which kinds of climate-related disasters became more common since 1980, and in which countries?
       </p>
+      <p>
+        Try this: start with the World view and switch the ranking to <em>Rise per year</em>. Floods stand out at once.
+        Then hide every type except Flood, click China or Indonesia in the ranking, and drag across the top chart to
+        compare the 1980s with the 2010s.
+      </p>
 
-      <h2>Interactive Chart (Prototype)</h2>
+      <h2>Interactive Visualization</h2>
       <div class="controls">
         <label>
           Place:
@@ -438,19 +433,29 @@
         </label>
         <button id="reset-place" type="button">Show World</button>
         <div id="type-toggles" aria-label="Disaster types"></div>
+        <label>
+          Rank countries by:
+          <select id="ranking-measure">
+            <option value="total">Total disasters</option>
+            <option value="change">Rise per year</option>
+          </select>
+        </label>
       </div>
       <p id="summary"></p>
       <div class="viz-grid">
         <div>
           <h3>Disasters per year by type: <span id="place-name"></span></h3>
+          <p class="chart-subtitle">Recorded disasters per year, stacked by type; World is the sum of all countries.</p>
           <svg id="chart-area" role="img" aria-label="Stacked area chart of disasters per year by type"></svg>
           <h3>Temperature change from the 1951–1980 average</h3>
+          <p class="chart-subtitle">Yearly temperature change in °C; red is warmer and blue is cooler than the baseline.</p>
           <svg id="chart-temperature" role="img" aria-label="Bar chart of temperature change per year"></svg>
         </div>
         <div>
-          <h3>Countries with the most disasters, <span id="ranking-years"></span></h3>
+          <h3 id="ranking-title"></h3>
+          <p id="ranking-subtitle" class="chart-subtitle"></p>
           <svg id="chart-ranking" aria-label="Ranking of countries by number of disasters"></svg>
-          <p class="chart-note">Click a country to show it in the charts on the left.</p>
+          <p class="chart-note">Click a country to show it in the charts on the left. Hover a bar for both periods.</p>
         </div>
       </div>
       <p class="chart-note">
@@ -460,12 +465,86 @@
         IMF Climate Change Indicators Dashboard (EM-DAT disaster counts; FAO temperature change).
       </p>
 
-      <h3>Next steps</h3>
+      <h2>Write-up</h2>
+
+      <h3>Motivation</h3>
+      <p>
+        Headlines often say that climate disasters are becoming more common. However, a single world total hides two
+        things that matter: which kinds of disasters drive the rise, and where they happen. Therefore, I designed one
+        graphic that lets a reader move from the World total to one disaster type and one country, and that ranks the
+        countries for any range of years.
+      </p>
+
+      <h3>Design rationale</h3>
       <ul>
-        <li>Add a world map colored by disasters in the selected years, linked to the ranking and the time charts.</li>
-        <li>Show each country's change between two periods (for example 1980–1999 and 2000–2022), not only totals.</li>
-        <li>Add a table view of the selected country's counts, and polish the tooltip and the mobile layout.</li>
+        <li>
+          <strong>Stacked area chart for counts over time.</strong> Position along a shared baseline shows the total per
+          year, and the stacked layers show how much each type adds. I considered a line per type, but six crossing
+          lines were hard to read, and the lines lost the total. A stacked bar chart was another option, but 43 bars
+          per year range looked busy, while an area reads as one continuous trend.
+        </li>
+        <li>
+          <strong>Diverging bars for temperature.</strong> Temperature change has a meaningful zero (the 1951–1980
+          average), so the bars grow up or down from that baseline: red for warmer and blue for cooler. I put the
+          temperature in its own chart below the counts, with the same year axis, instead of a second y-axis on the
+          area chart, because two y-scales on one chart invite false comparisons.
+        </li>
+        <li>
+          <strong>Ranked bar chart for countries.</strong> Bar length on a common scale is the most accurate channel
+          for comparing countries. I considered a world map, but a map uses area, so large countries such as Russia
+          look important even when their counts are low, and small island states almost disappear.
+        </li>
+        <li>
+          <strong>Color.</strong> Each disaster type keeps one fixed color, and the colors do not change when a type
+          is hidden, so a reader never has to relearn the legend. The ranking bars are gray, because color there would
+          suggest a category that does not exist; the selected country is dark gray.
+        </li>
+        <li>
+          <strong>Interactions.</strong> The views are linked through one shared state. The country box and a click
+          on the ranking pick a place (dynamic query). The type buttons filter every view. Brushing years on the area
+          chart changes the period of the ranking. The measure menu switches the ranking between total disasters and
+          the rise per year, which answers the "became more common" part of the question directly. Finally, hovering
+          either time chart shows a tooltip with the counts per type and the temperature for that year, and hovering
+          a ranking bar shows both period averages (details on demand).
+        </li>
       </ul>
+
+      <h3>Data transformations</h3>
+      <ul>
+        <li>I pivoted the two IMF tables from wide (one column per year) to one series per country and year, and
+          joined them by ISO country code. Only the years 1980–2022 are kept, because the disaster table starts in
+          1980.</li>
+        <li>I dropped the IMF "TOTAL" rows, because they are the sum of the six types and would double count. An
+          empty cell counts as zero disasters, and countries with no recorded disaster are left out.</li>
+        <li>The World series is the sum of all countries for each type and year; the World temperature uses the FAO
+          World row.</li>
+        <li>The <em>Rise per year</em> measure splits the selected years into two halves of equal length (for all
+          years: 1980–2000 and 2002–2022) and subtracts the average disasters per year in the first half from the
+          second half.</li>
+        <li>Each chart's subtitle states what is counted. One caveat: EM-DAT counts reported disasters, and the
+          number of reporting countries also grew (from 62 a year in the 1980s to 112 a year in 2013–2022), so part of the rise may come from better
+          reporting.</li>
+      </ul>
+
+      <h3>Development process</h3>
+      <p>
+        I could not find a teammate in time, so I worked on this project alone. As a result, I did all the parts: data
+        preparation, exploration, design, and the D3 code.
+        In total, I spent about <strong>15 hours</strong>. First, I reused the IMF data from Project 2 and made the six
+        exploratory graphs in Python (about 3 hours). Then, I built the three linked views in D3 for the checkpoint
+        (about 7 hours). After the checkpoint, I added the rise-per-year measure, the subtitles, and this write-up
+        (about 5 hours).
+      </p>
+      <p>
+        The linked interactions took the most time. For example, the brush and the hover tooltip both listen to the
+        same chart, and every redraw (after a type toggle or a window resize) has to put the brushed years back. Cleaning the country names (for example, "China, P.R.: Mainland") and handling countries with no
+        temperature data also took longer than I expected.
+      </p>
+      <p>
+        Source code: <a href="https://github.com/Davids048/Davids048.github.io/tree/main/DSC209R/project3">DSC209R/project3</a>
+        (<code>main.js</code> for the D3 chart and <code>prep/build_data.py</code> for the data file). The chart uses only
+        D3.js v7 and loads one static JSON file.
+      </p>
     </main>
     <div id="tooltip" role="status"></div>
   </body>
