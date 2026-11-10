@@ -1,0 +1,74 @@
+[
+  {
+    "title": "FastVideo",
+    "year": "2025",
+    "image": "images/projects/fastvideo.svg",
+    "description": "An open-source framework for fast video generation, with sparse attention, distillation, and optimized inference for diffusion video models. <a href=\"https://github.com/hao-ai-lab/FastVideo\">GitHub</a>"
+  },
+  {
+    "title": "SpaLLM",
+    "year": "2025",
+    "image": "images/projects/spallm.png",
+    "description": "Unified compressive adaptation of LLMs with sketching. Fine-tune compressed models directly using parameter-sharing sketches. <a href=\"https://arxiv.org/abs/2410.06364\">ICML 2025</a>"
+  },
+  {
+    "title": "SpartanServe",
+    "year": "2024",
+    "image": "images/projects/spartanserve.png",
+    "description": "Fast concurrent LLM adapter serving with structurally sparse adapters, using custom Triton kernels and CUDA graphs. <a href=\"https://aclanthology.org/2024.findings-emnlp.284/\">Findings of EMNLP 2024</a>"
+  },
+  {
+    "title": "LLM Finetuning Project",
+    "year": "2024",
+    "image": "images/projects/placeholder.svg",
+    "description": "Evaluated PEFT methods and 4-bit quantization for aligning small LLMs (Falcon, Gemma, Phi-2) on domain-specific tasks."
+  },
+  {
+    "title": "NoSQL Document Database",
+    "year": "2023",
+    "image": "images/projects/placeholder.svg",
+    "description": "A network accessible document database written in Golang with RESTful queries, updates, and subscriptions."
+  },
+  {
+    "title": "Wearable ECG Arrhythmia Detection",
+    "year": "2024",
+    "image": "images/projects/placeholder.svg",
+    "description": "Hierarchical deep learning for multilabel arrhythmia detection and classification on real-world wearable ECG data. <a href=\"https://pubmed.ncbi.nlm.nih.gov/39416857/\">Digital Health</a>"
+  },
+  {
+    "title": "DSC 209R Project 2: Persuasive or Deceptive Visualization",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "Two charts from the same IMF climate data that argue for and against the claim that climate change is making natural disasters more frequent. <a href=\"https://davids048.github.io/DSC209R/project2/\">Report</a>"
+  },
+  {
+    "title": "DSC 209R Project 1: Expository Visualization",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "A line chart of the GroceryDB dataset that shows ultra-processed food is the cheapest source of calories in the grocery store."
+  },
+  {
+    "title": "DSC 209R Lab 4: JavaScript II",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "Project cards rendered from a JSON file, and GitHub profile stats loaded from the GitHub API."
+  },
+  {
+    "title": "DSC 209R Lab 3: Introduction to JS",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "A navigation menu and a light/dark color scheme switcher built with JavaScript. <a href=\"https://davids048.github.io/DSC209R/lab3/\">Site</a>"
+  },
+  {
+    "title": "DSC 209R Lab 2: Styling with CSS",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "CSS grid layouts for the projects, contact, and CV pages of this website. <a href=\"https://davids048.github.io/DSC209R/lab2/\">Site</a>"
+  },
+  {
+    "title": "DSC 209R Lab 1: Introduction to the Web Platform",
+    "year": "2026",
+    "image": "images/projects/placeholder.svg",
+    "description": "Projects, contact, and CV pages added to this website in plain HTML. <a href=\"https://davids048.github.io/DSC209R/lab1/\">Site</a>"
+  }
+]
