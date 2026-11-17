@@ -18,12 +18,12 @@ let pages = [
 ];
 
 // A local server (for example, VS Code Live Server opened on this folder) serves
-// this site from the server root. GitHub Pages serves it from the DSC209R/lab6/
-// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab6/.
+// this site from the server root. GitHub Pages serves it from the DSC209R/lab7/
+// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab7/.
 const BASE_PATH =
     location.hostname === 'localhost' || location.hostname === '127.0.0.1'
         ? '/'
-        : '/DSC209R/lab6/';
+        : '/DSC209R/lab7/';
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
@@ -109,9 +109,16 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     for (let project of projects) {
         let image = project.image.startsWith('http') ? project.image : BASE_PATH + project.image;
 
+        // A project with a url field links its title to that page (a site-relative path or a full URL).
+        let title = project.title;
+        if (project.url) {
+            let url = project.url.startsWith('http') ? project.url : BASE_PATH + project.url;
+            title = `<a href="${url}">${project.title}</a>`;
+        }
+
         let article = document.createElement('article');
         article.innerHTML = `
-            <${headingLevel}>${project.title}</${headingLevel}>
+            <${headingLevel}>${title}</${headingLevel}>
             <img src="${image}" alt="${project.title}">
             <div>
                 <p>${project.description}</p>

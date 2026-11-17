@@ -1,5 +1,12 @@
 [
   {
+    "title": "Bikewatching",
+    "year": "2026",
+    "image": "images/projects/bikewatching.png",
+    "url": "bikewatching/",
+    "description": "An interactive Mapbox and D3 map of Bluebikes traffic in Boston and Cambridge in March 2024, with bike lanes, stations sized by traffic, colored by departure/arrival balance, and a time-of-day filter."
+  },
+  {
     "title": "FastVideo",
     "year": "2025",
     "image": "images/projects/fastvideo.svg",
