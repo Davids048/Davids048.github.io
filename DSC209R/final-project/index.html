@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Warmer World, More Disasters?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <p class="kicker">DSC 209R Final Project · Prototype · Junda Su</p>
+    <h1>Warmer World, More Disasters?</h1>
+    <p class="lede">Climate disasters since 1980, from the IMF Climate Change Indicators Dashboard. The world warmed by
+      about 1 °C, and recorded disasters went up. Did the heat cause the rise? Before you look at the data, make a
+      guess.</p>
+  </header>
+
+  <!-- 1. Hook: the reader draws a guess before the data is shown. -->
+  <section id="hook">
+    <h2>1. Draw your guess</h2>
+    <p>The chart starts at 104 recorded climate disasters in 1980. Drag across the chart to draw how you think the
+      yearly count changed until 2022, then press <b>Reveal</b>.</p>
+    <div id="guess-chart" class="chart"></div>
+    <div class="controls">
+      <button id="reveal" disabled>Reveal</button>
+      <button id="reset-guess" class="secondary">Clear</button>
+      <span id="guess-result" class="note"></span>
+    </div>
+  </section>
+
+  <!-- 2. Story: warming, disasters by type, and reporting coverage. -->
+  <section id="warming">
+    <h2>2. The world got warmer…</h2>
+    <p>Each bar is one year of world surface temperature change relative to the 1951–1980 average. Since 1980,
+      almost every year has been warmer than that baseline, and 2022 was 1.4 °C warmer. Hover a bar to see the value.</p>
+    <div id="temp-chart" class="chart"></div>
+  </section>
+
+  <section id="types">
+    <h2>3. …and recorded disasters rose, <em>but</em> only until about 2000</h2>
+    <p>Recorded disasters rose 2.6× from the 1980s to the 2000s, then leveled off while the warming went on. Floods
+      and storms make up about 80% of the total. Click a type in the legend to show or hide it; hover to read a
+      year.</p>
+    <div id="type-legend" class="legend"></div>
+    <div id="type-chart" class="chart"></div>
+  </section>
+
+  <section id="reporting">
+    <h2>4. Part of the rise is better reporting</h2>
+    <p>In 1980 only 61 countries had any recorded climate disaster; after 2000 about 113 countries did each year.
+      Switch the view to see the count per reporting country, which grows 1.4× from the 1980s to the 2000s instead of 2.6×.</p>
+    <div class="controls">
+      <label><input type="radio" name="rep" value="total" checked> Total disasters</label>
+      <label><input type="radio" name="rep" value="countries"> Countries with a disaster</label>
+      <label><input type="radio" name="rep" value="per"> Disasters per reporting country</label>
+    </div>
+    <div id="rep-chart" class="chart"></div>
+  </section>
+
+  <!-- 3. Linked scatter with a year brush. -->
+  <section id="scatter">
+    <h2>5. Warmer years, more disasters?</h2>
+    <p>One dot per year. Drag on the timeline below the scatter plot to pick a range of years. The selected years
+      are highlighted, and the correlation and fit line update. Try 1980–1999, then 2000–2022.</p>
+    <div id="scatter-chart" class="chart"></div>
+    <div id="brush-chart" class="chart"></div>
+    <p id="scatter-stat" class="stat"></p>
+  </section>
+
+  <!-- 4. Country explorer (prototype of the planned map + ranking). -->
+  <section id="countries">
+    <h2>6. Test the claim for one place</h2>
+    <p>Pick a disaster type. The ranking shows the countries whose yearly count rose most from 1980–1999 to
+      2000–2022. Click a bar, or pick a country in the menu, to see its disasters and its warming year by year.</p>
+    <div class="controls">
+      <label>Type <select id="type-select"></select></label>
+      <label>Country <select id="country-select"></select></label>
+    </div>
+    <div class="two-col">
+      <div id="rank-chart" class="chart"></div>
+      <div id="country-chart" class="chart"></div>
+    </div>
+  </section>
+
+  <section id="writeup">
+    <h2>Prototype write-up</h2>
+    <h3>What have you done so far?</h3>
+    <p>I joined two IMF Climate Change Indicators tables, the EM-DAT climate-related disaster counts and the FAO
+      surface temperature change, into one JSON file with a world series and a per-country series for 1980–2022. I
+      laid out the full structure of the explorable explanation, from the opening guess to the country explorer, and
+      wrote short descriptive text for each step. Every section already has a working D3 chart: a draw-your-guess
+      hook, the warming bars, a stacked area chart with type toggles, a reporting-coverage chart with three views, a
+      year-brushed scatter plot, and a linked ranking and country chart. Tooltips, the legend toggles, the brush, and
+      the country and type pickers all work, but the styling, annotations and transitions are still rough. The world
+      map that I planned in the proposal is not built yet; the ranking and the country menu stand in for it now.</p>
+    <h3>What will be the most challenging of your project to design and why?</h3>
+    <p>The hardest part will be to show the reporting caveat without hiding the real warming signal, because the same
+      rise in counts mixes real change and better record keeping. If I stress the caveat too much, readers may leave
+      thinking that climate change has no effect on disasters, which the data also does not show. A second challenge
+      is the world map: small island states have many disasters per person but are almost invisible on a map, while
+      large countries such as China and the United States dominate any raw count. I will need to choose between raw
+      counts, counts per reporting year and rises over time, and make that choice clear in the legend. Finally, the
+      scroll story must link the charts so that a brush or a country pick in one view carries over to the next views
+      without confusing the reader.</p>
+  </section>
+
+  <footer>
+    <p>Data: IMF Climate Change Indicators Dashboard (climatedata.imf.org): EM-DAT, CRED / UCLouvain climate-related
+      disaster frequency; FAO surface temperature change. Counts are recorded disasters, so they depend on reporting.
+      Source code: <a href="https://github.com/Davids048/Davids048.github.io/tree/main/DSC209R/final-project">GitHub</a>.</p>
+  </footer>
+</main>
+<div id="tooltip" hidden></div>
+<script type="module" src="main.js"></script>
+</body>
+</html>

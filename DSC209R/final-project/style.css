@@ -1,0 +1,39 @@
+:root {
+  --text: #1d1d1f;
+  --muted: #666;
+  --bg: #fff;
+  --grid: #e5e5e5;
+  --accent: #c0392b;
+  color-scheme: light;
+}
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 2.2rem; margin: 0.2em 0; }
+h2 { margin-top: 2.4em; font-size: 1.35rem; }
+h3 { font-size: 1.05rem; margin-bottom: 0.3em; }
+.kicker { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
+.lede { font-size: 1.1rem; }
+.chart { width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis text { font-size: 11px; fill: var(--muted); }
+.axis path, .axis line { stroke: #bbb; }
+.grid line { stroke: var(--grid); }
+.grid path { display: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; margin: 8px 0; }
+button { font: inherit; padding: 6px 14px; border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 6px; cursor: pointer; }
+button.secondary { background: #fff; color: var(--accent); }
+button:disabled { opacity: 0.4; cursor: default; }
+select { font: inherit; padding: 4px; max-width: 260px; }
+.note { color: var(--muted); }
+.stat { font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 6px 0; }
+.legend-item { cursor: pointer; user-select: none; font-size: 0.9rem; }
+.legend-item.off { opacity: 0.35; }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+.bar { cursor: pointer; }
+.bar.selected { stroke: #111; stroke-width: 1.5; }
+#tooltip { position: fixed; pointer-events: none; background: rgba(20, 20, 20, 0.9); color: #fff; padding: 6px 9px; border-radius: 5px; font-size: 0.8rem; line-height: 1.35; z-index: 10; }
+#guess-chart svg { cursor: crosshair; touch-action: none; }
+footer { margin-top: 3em; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--grid); }
