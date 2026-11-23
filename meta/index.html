@@ -16,16 +16,32 @@
         and the commit data comes from git blame on those lines.
     </p>
 
+    <!-- Time filter: main.js shows only the commits up to the selected time. -->
+    <div id="time-filter">
+        <label>
+            Show commits until:
+            <input type="range" id="commit-progress" min="0" max="100" value="100">
+            <time id="commit-time"></time>
+        </label>
+    </div>
+
     <h2>Summary</h2>
     <!-- main.js renders the codebase summary stats here. -->
     <div id="stats"></div>
 
     <h2>Commits by time of day</h2>
-    <!-- main.js draws the commit scatterplot here. -->
-    <div id="chart"></div>
+    <!-- Scrollytelling: the story steps on the left update the sticky scatterplot
+         on the right. -->
+    <div id="scrolly-1">
+        <div id="scatter-story"></div>
+        <div id="scatter-plot">
+            <!-- main.js draws the commit scatterplot here. -->
+            <div id="chart"></div>
 
-    <p id="selection-count">No commits selected</p>
-    <dl id="language-breakdown" class="stats"></dl>
+            <p id="selection-count">No commits selected</p>
+            <dl id="language-breakdown" class="stats"></dl>
+        </div>
+    </div>
 
     <!-- Tooltip that main.js fills in and shows when the mouse is over a dot. -->
     <dl id="commit-tooltip" class="info tooltip" hidden>
@@ -38,7 +54,7 @@
         <dd id="commit-date"></dd>
 
         <dt>Time</dt>
-        <dd id="commit-time"></dd>
+        <dd id="commit-hour"></dd>
 
         <dt>Author</dt>
         <dd id="commit-author"></dd>
@@ -46,5 +62,9 @@
         <dt>Lines edited</dt>
         <dd id="commit-lines"></dd>
     </dl>
+
+    <h2>The race for the biggest file</h2>
+    <!-- main.js draws one dot per line of each file here. -->
+    <dl id="files"></dl>
 </body>
 </html>

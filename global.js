@@ -19,11 +19,11 @@ let pages = [
 
 // A local server (for example, VS Code Live Server opened on this folder) serves
 // this site from the server root. GitHub Pages serves it from the DSC209R/lab7/
-// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab7/.
+// folder of the Davids048.github.io site, at https://davids048.github.io/DSC209R/lab8/.
 const BASE_PATH =
     location.hostname === 'localhost' || location.hostname === '127.0.0.1'
         ? '/'
-        : '/DSC209R/lab7/';
+        : '/DSC209R/lab8/';
 
 let nav = document.createElement('nav');
 document.body.prepend(nav);
