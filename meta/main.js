@@ -8,6 +8,9 @@ import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 // The scales are module-level because the brush handlers also use them.
 let xScale;
 let yScale;
+// The dot size scale uses all commits, so a dot keeps its size as the
+// filtered commits change.
+let rScale;
 
 // Read loc.csv and convert the numeric and date columns from strings.
 async function loadData() {
@@ -131,7 +134,7 @@ function renderScatterPlot(data, commits) {
     gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
 
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+    rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
 
     // Large dots are drawn first, so the small dots on top stay hoverable.
     const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
@@ -158,7 +161,7 @@ function renderScatterPlot(data, commits) {
             updateTooltipVisibility(false);
         });
 
-    const xAxis = d3.axisBottom(xScale);
+    const xAxis = d3.axisBottom(xScale).ticks(6);
     const yAxis = d3
         .axisLeft(yScale)
         .tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');
@@ -183,14 +186,16 @@ function renderScatterPlot(data, commits) {
 function updateScatterPlot(data, commits) {
     const svg = d3.select('#chart').select('svg');
 
-    xScale = xScale.domain(d3.extent(commits, (d) => d.datetime)).nice();
-
-    const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+    // Pad the date range by one day on each side, so a short range (for
+    // example one commit) still gets readable date ticks.
+    const [minDate, maxDate] = d3.extent(commits, (d) => d.datetime);
+    xScale = xScale
+        .domain([d3.timeDay.offset(minDate, -1), d3.timeDay.offset(maxDate, 1)])
+        .nice();
 
     const xAxisGroup = svg.select('g.x-axis');
     xAxisGroup.selectAll('*').remove();
-    xAxisGroup.call(d3.axisBottom(xScale));
+    xAxisGroup.call(d3.axisBottom(xScale).ticks(6));
 
     const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
     svg.select('g.dots')
@@ -398,51 +403,81 @@ function onTimeSliderChange() {
     commitProgress = Number(slider.value);
     commitMaxTime = timeScale.invert(commitProgress);
     updateView();
+
+    // Show the story step of the latest commit shown. Each step is as tall as
+    // the story box, so step i starts at i box heights.
+    const scrolly = document.getElementById('scrolly-1');
+    scrolly.scrollTop = (filteredCommits.length - 1) * scrolly.clientHeight;
 }
 
 renderScatterPlot(data, commits);
 slider.addEventListener('input', onTimeSliderChange);
 onTimeSliderChange();
 
-// Scrollytelling: one story step per commit, next to the sticky scatterplot.
+// Scrollytelling: one story step per commit, next to the scatterplot.
 d3.select('#scatter-story')
     .selectAll('.step')
     .data(commits)
     .join('div')
     .attr('class', 'step')
-    .html(
-        (d, i) => `
-        On ${d.datetime.toLocaleString('en', {
-            dateStyle: 'full',
-            timeStyle: 'short',
-        })},
-        I made <a href="${d.url}" target="_blank">${
-            i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
-        }</a>.
-        I edited ${d.totalLines} lines across ${
-            d3.rollups(
-                d.lines,
-                (D) => D.length,
-                (d) => d.file,
-            ).length
-        } files.
-        Then I looked over all I had made, and I saw that it was very good.
-    `,
-    );
+    .html((d, i) => {
+        const fileCount = d3.group(d.lines, (line) => line.file).size;
+        const date = d.datetime.toLocaleString('en', { dateStyle: 'full', timeStyle: 'short' });
+        const commitText = i > 0 ? 'a commit' : 'my first commit';
+        return `<p>On ${date}, I made <a href="${d.url}" target="_blank">${commitText}</a>.
+            I edited ${d.totalLines} ${d.totalLines === 1 ? 'line' : 'lines'}
+            across ${fileCount} ${fileCount === 1 ? 'file' : 'files'}.</p>`;
+    });
 
-// When a story step crosses the middle of the screen, show the commits up to
+// When a story step crosses the middle of the story column, show the commits up to
 // the commit of that step, and move the slider to match.
 function onStepEnter(response) {
+    // Skip the step that the slider scrolled to: the view already shows it,
+    // and moving the slider to the commit's time would fight the drag.
+    if (commits.indexOf(response.element.__data__) === filteredCommits.length - 1) {
+        return;
+    }
     commitMaxTime = response.element.__data__.datetime;
     commitProgress = timeScale(commitMaxTime);
     slider.value = commitProgress;
     updateView();
 }
 
+// Size the story box to fill the window below the page header, so the header
+// and the story fit on one screen.
+const scrolly = document.getElementById('scrolly-1');
+const boxTop = scrolly.getBoundingClientRect().top + window.scrollY;
+const boxHeight = window.innerHeight - boxTop - 8;
+scrolly.style.setProperty('--box-h', `${boxHeight}px`);
+
+// Keep the axis labels about 11 screen pixels tall, whatever size the
+// 1000-unit-wide chart is drawn at.
+const chartScale = document.querySelector('#chart svg').getBoundingClientRect().width / 1000;
+scrolly.style.setProperty('--tick-size', `${11 / chartScale}px`);
+
+// The trigger line is the middle of the story box, in window pixels, with the
+// page scrolled to the top. Each step is as tall as the box, so a step enters
+// when it covers more than half of the box.
 const scroller = scrollama();
 scroller
     .setup({
         container: '#scrolly-1',
         step: '#scrolly-1 .step',
+        offset: `${boxTop + boxHeight / 2}px`,
     })
     .onStepEnter(onStepEnter);
+
+// Hand the wheel to the page after the last step (to reach the file race), and
+// while the page is scrolled down (to come back up), so the box scrolls only
+// when the page is at the top.
+scrolly.addEventListener(
+    'wheel',
+    (event) => {
+        const atLastStep = scrolly.scrollTop + scrolly.clientHeight >= scrolly.scrollHeight - 1;
+        if (window.scrollY > 0 || (atLastStep && event.deltaY > 0)) {
+            event.preventDefault();
+            window.scrollBy(0, event.deltaY);
+        }
+    },
+    { passive: false },
+);

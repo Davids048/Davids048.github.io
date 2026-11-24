@@ -440,32 +440,64 @@ dl.info {
     border-radius: 50%;
 }
 
-/* Scrollytelling layout: the story on the left and the sticky scatterplot on
-   the right. The plot needs a fixed height, or position: sticky has no effect. */
+/* Scrollytelling layout: the story box fills the window height left below
+   the page header (main.js sets --box-h), so the header and the story fit on
+   one screen. The box is the only thing that scrolls: the story on the left
+   shows one step at a time, and the plot on the right stays pinned in place.
+   After the last step, scrolling goes on to the page and the file race. */
 #scrolly-1 {
-    position: relative;
     display: flex;
     gap: 1rem;
-
-    > * {
-        flex: 1;
-    }
+    height: var(--box-h, 70vh);
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
 }
 
 #scatter-story {
-    position: relative;
+    flex: 1;
 }
 
+/* Each step is as tall as the box, with its text centered vertically. */
+.step {
+    box-sizing: border-box;
+    height: var(--box-h, 70vh);
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    font-size: 110%;
+    scroll-snap-align: start;
+}
+
+/* The plot gets two thirds of the width and stays pinned while the story
+   scrolls, centered vertically in the box. main.js sets the axis label size
+   (--tick-size) for the size the chart is drawn at. The left
+   and right padding leave room for the axis labels that stick out of the chart. */
 #scatter-plot {
+    flex: 2;
     position: sticky;
     top: 0;
-    left: 0;
-    bottom: auto;
-    height: 50vh;
-}
+    align-self: flex-start;
+    box-sizing: border-box;
+    height: var(--box-h, 70vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 2.5em;
+    padding-right: 1.5em;
 
-/* Space out the story steps, so each step crosses the middle of the screen on
-   its own. */
-.step {
-    padding-bottom: 60vh;
+    p {
+        margin: 0.5em 0 0;
+    }
+
+    /* The chart shrinks to fit the box height, keeping its aspect ratio. */
+    svg {
+        display: block;
+        width: 100%;
+        max-height: calc(var(--box-h, 70vh) - 4.5em);
+    }
+
+    .tick text {
+        font-size: var(--tick-size, 20px);
+    }
 }
