@@ -13,6 +13,7 @@ h2 { margin-top: 2.4em; font-size: 1.35rem; }
 h3 { font-size: 1.05rem; margin-bottom: 0.3em; }
 .kicker { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
 .lede { font-size: 1.1rem; }
+.byline { color: var(--muted); margin: -8px 0 0; }
 .chart { width: 100%; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .axis text { font-size: 11px; fill: var(--muted); }
